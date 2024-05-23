@@ -62,10 +62,12 @@ public abstract class BaseScalaCompileOptions extends org.gradle.api.tasks.compi
 
     private List<String> loggingPhases;
 
+    @SuppressWarnings("this-escape")
     private ScalaForkOptions forkOptions = getObjectFactory().newInstance(ScalaForkOptions.class);
 
     private IncrementalCompileOptions incrementalOptions;
 
+    @SuppressWarnings("this-escape")
     private final Property<KeepAliveMode> keepAliveMode = getObjectFactory().property(KeepAliveMode.class);
 
     @Inject
