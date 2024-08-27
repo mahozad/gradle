@@ -165,6 +165,11 @@ The existing method does not behave as specified by its javadoc, and we do not p
 
 Potential migrations include using `Object.equals(Object)` directly, or comparing the fields of dependencies manually.
 
+[[deprecated_javadoc_verbose]]
+==== Deprecated `Javadoc.isVerbose()` and `Javadoc.setVerbose(boolean)`
+
+These methods duplicate the functionality of `Javadoc.getOptions().isVerbose()` and `Javadoc.getOptions().verbose()`, and do not document that setting `false` does not do anything.
+
 [[changes_8.10]]
 == Upgrading from 8.9 and earlier
 

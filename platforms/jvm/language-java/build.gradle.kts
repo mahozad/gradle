@@ -58,6 +58,7 @@ dependencies {
     implementation(projects.jvmServices)
     implementation(projects.logging)
     implementation(projects.loggingApi)
+    implementation(projects.logging)
     implementation(projects.modelCore)
     implementation(projects.toolingApi)
 
