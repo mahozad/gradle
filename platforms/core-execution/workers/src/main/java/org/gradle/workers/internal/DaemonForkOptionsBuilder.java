@@ -76,7 +76,7 @@ public class DaemonForkOptionsBuilder {
     public DaemonForkOptions build() {
         JavaForkOptionsInternal forkOptions = buildJavaForkOptions();
         if (OperatingSystem.current().isWindows() && keepAliveMode == KeepAliveMode.DAEMON) {
-            List<String> jvmArgs = forkOptions.getAllJvmArgs();
+            List<String> jvmArgs = forkOptions.getAllJvmArgs().get();
             Optional<String> unreliableArgument = findUnreliableArgument(jvmArgs);
             if (unreliableArgument.isPresent()) {
                 LOGGER.info("Worker requested to be persistent, but the JVM argument '{}' may make the worker unreliable when reused across multiple builds. Worker will expire at the end of the build session.", unreliableArgument.get());

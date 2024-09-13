@@ -56,9 +56,9 @@ public class DaemonForkOptions {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("executable", forkOptions.getExecutable())
-                .add("minHeapSize", forkOptions.getMinHeapSize())
-                .add("maxHeapSize", forkOptions.getMaxHeapSize())
-                .add("jvmArgs", forkOptions.getJvmArgs())
+                .add("minHeapSize", forkOptions.getMinHeapSize().getOrNull())
+                .add("maxHeapSize", forkOptions.getMaxHeapSize().getOrNull())
+                .add("jvmArgs", forkOptions.getJvmArgs().getOrNull())
                 .add("keepAliveMode", keepAliveMode)
                 .toString();
     }
