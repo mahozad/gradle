@@ -44,6 +44,7 @@ import org.gradle.process.ProcessForkOptions;
 import org.gradle.process.internal.DefaultJavaExecSpec;
 import org.gradle.process.internal.ExecActionFactory;
 import org.gradle.process.internal.JavaExecAction;
+import org.gradle.process.internal.JavaForkOptionsInternal;
 import org.gradle.work.DisableCachingByDefault;
 
 import javax.annotation.Nullable;
@@ -152,13 +153,14 @@ public abstract class JavaExec extends ConventionTask implements JavaExecSpec {
     public void exec() {
         validateExecutableMatchesToolchain();
 
+        JavaExecAction javaExecAction = getExecActionFactory().newJavaExecAction();
+        javaExecSpec.copyTo(javaExecAction);
         List<String> jvmArgs = javaExecSpec.getJvmArguments().getOrNull();
         if (jvmArgs != null) {
+            ((JavaForkOptionsInternal) javaExecAction).setExtraJvmArgs(jvmArgs);
             javaExecSpec.setExtraJvmArgs(jvmArgs);
         }
 
-        JavaExecAction javaExecAction = getExecActionFactory().newJavaExecAction();
-        javaExecSpec.copyTo(javaExecAction);
         String effectiveExecutable = getJavaLauncher().get().getExecutablePath().toString();
         javaExecAction.setExecutable(effectiveExecutable);
 
