@@ -16,6 +16,7 @@
 
 package org.gradle.internal.component.resolution.failure;
 
+import com.google.common.collect.ImmutableList;
 import org.gradle.api.artifacts.component.ComponentIdentifier;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.ResolvedVariant;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.ResolvedVariantSet;
@@ -41,6 +42,8 @@ import org.gradle.internal.component.resolution.failure.ResolutionCandidateAsses
 import org.gradle.internal.component.resolution.failure.describer.ResolutionFailureDescriber;
 import org.gradle.internal.component.resolution.failure.exception.AbstractResolutionFailureException;
 import org.gradle.internal.component.resolution.failure.interfaces.ResolutionFailure;
+import org.gradle.internal.component.resolution.failure.transform.TransformedVariantConverter;
+import org.gradle.internal.component.resolution.failure.transform.TransformationChainData;
 import org.gradle.internal.component.resolution.failure.type.AmbiguousArtifactTransformsFailure;
 import org.gradle.internal.component.resolution.failure.type.AmbiguousArtifactsFailure;
 import org.gradle.internal.component.resolution.failure.type.AmbiguousVariantsFailure;
@@ -80,10 +83,16 @@ import java.util.stream.Stream;
 public class ResolutionFailureHandler {
     public static final String DEFAULT_MESSAGE_PREFIX = "Review the variant matching algorithm at ";
 
+    private final InternalProblems problemsService;
+    private final TransformedVariantConverter transformedVariantConverter;
+
     private final ResolutionFailureDescriberRegistry defaultFailureDescribers;
     private final ResolutionFailureDescriberRegistry customFailureDescribers;
 
-    public ResolutionFailureHandler(InstanceGenerator instanceGenerator, InternalProblems problemsService) {
+    public ResolutionFailureHandler(InstanceGenerator instanceGenerator, InternalProblems problems, TransformedVariantConverter transformedVariantConverter) {
+        this.problemsService = problems;
+        this.transformedVariantConverter = transformedVariantConverter;
+
         this.defaultFailureDescribers = ResolutionFailureDescriberRegistry.standardRegistry(instanceGenerator);
         this.customFailureDescribers = ResolutionFailureDescriberRegistry.emptyRegistry(instanceGenerator);
 
@@ -197,7 +206,8 @@ public class ResolutionFailureHandler {
         ImmutableAttributes requestedAttributes,
         List<TransformedVariant> transformedVariants
     ) {
-        AmbiguousArtifactTransformsFailure failure = new AmbiguousArtifactTransformsFailure(getOrCreateVariantSetComponentIdentifier(targetVariantSet), targetVariantSet.asDescribable().getDisplayName(), requestedAttributes, transformedVariants);
+        ImmutableList<TransformationChainData> transformationChainDatas = transformedVariantConverter.convert(transformedVariants);
+        AmbiguousArtifactTransformsFailure failure = new AmbiguousArtifactTransformsFailure(getOrCreateVariantSetComponentIdentifier(targetVariantSet), targetVariantSet.asDescribable().getDisplayName(), requestedAttributes, transformationChainDatas);
         return describeFailure(failure);
     }
 
