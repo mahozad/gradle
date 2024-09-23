@@ -62,7 +62,7 @@ import org.gradle.api.internal.artifacts.transform.TransformExecutionListener;
 import org.gradle.api.internal.artifacts.transform.TransformStepNodeDependencyResolver;
 import org.gradle.api.internal.artifacts.verification.signatures.DefaultSignatureVerificationServiceFactory;
 import org.gradle.api.internal.artifacts.verification.signatures.SignatureVerificationServiceFactory;
-import org.gradle.api.internal.attributes.ImmutableAttributesFactory;
+import org.gradle.api.internal.attributes.AttributesFactory;
 import org.gradle.api.internal.catalog.DefaultDependenciesAccessors;
 import org.gradle.api.internal.catalog.DependenciesAccessorsWorkspaceProvider;
 import org.gradle.api.internal.file.FileCollectionFactory;
@@ -188,7 +188,7 @@ class DependencyManagementBuildScopeServices implements ServiceRegistrationProvi
     DefaultProjectDependencyFactory createProjectDependencyFactory(
         Instantiator instantiator,
         StartParameter startParameter,
-        ImmutableAttributesFactory attributesFactory,
+        AttributesFactory attributesFactory,
         TaskDependencyFactory taskDependencyFactory,
         CapabilityNotationParser capabilityNotationParser,
         ObjectFactory objectFactory,
@@ -204,7 +204,7 @@ class DependencyManagementBuildScopeServices implements ServiceRegistrationProvi
         ClassPathRegistry classPathRegistry,
         FileCollectionFactory fileCollectionFactory,
         RuntimeShadedJarFactory runtimeShadedJarFactory,
-        ImmutableAttributesFactory attributesFactory,
+        AttributesFactory attributesFactory,
         SimpleMapInterner stringInterner,
         CapabilityNotationParser capabilityNotationParser,
         ObjectFactory objectFactory
@@ -224,7 +224,7 @@ class DependencyManagementBuildScopeServices implements ServiceRegistrationProvi
         Instantiator instantiator,
         ObjectFactory objectFactory,
         DefaultProjectDependencyFactory factory,
-        ImmutableAttributesFactory attributesFactory,
+        AttributesFactory attributesFactory,
         SimpleMapInterner stringInterner
     ) {
         return new DefaultDependencyConstraintFactory(
@@ -344,7 +344,7 @@ class DependencyManagementBuildScopeServices implements ServiceRegistrationProvi
     }
 
     @Provides
-    ModuleComponentResolveMetadataSerializer createModuleComponentResolveMetadataSerializer(ImmutableAttributesFactory attributesFactory, MavenMutableModuleMetadataFactory mavenMetadataFactory, IvyMutableModuleMetadataFactory ivyMetadataFactory, ImmutableModuleIdentifierFactory moduleIdentifierFactory, NamedObjectInstantiator instantiator, ModuleSourcesSerializer moduleSourcesSerializer) {
+    ModuleComponentResolveMetadataSerializer createModuleComponentResolveMetadataSerializer(AttributesFactory attributesFactory, MavenMutableModuleMetadataFactory mavenMetadataFactory, IvyMutableModuleMetadataFactory ivyMetadataFactory, ImmutableModuleIdentifierFactory moduleIdentifierFactory, NamedObjectInstantiator instantiator, ModuleSourcesSerializer moduleSourcesSerializer) {
         DesugaringAttributeContainerSerializer attributeContainerSerializer = new DesugaringAttributeContainerSerializer(attributesFactory, instantiator);
         return new ModuleComponentResolveMetadataSerializer(new ModuleMetadataSerializer(attributeContainerSerializer, mavenMetadataFactory, ivyMetadataFactory, moduleSourcesSerializer), attributeContainerSerializer, moduleIdentifierFactory);
     }
@@ -419,7 +419,7 @@ class DependencyManagementBuildScopeServices implements ServiceRegistrationProvi
         ExecutionEngine executionEngine,
         FeatureFlags featureFlags,
         FileCollectionFactory fileCollectionFactory,
-        ImmutableAttributesFactory attributesFactory,
+        AttributesFactory attributesFactory,
         CapabilityNotationParser capabilityNotationParser,
         InputFingerprinter inputFingerprinter
     ) {

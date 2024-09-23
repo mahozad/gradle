@@ -103,9 +103,9 @@ import org.gradle.api.internal.artifacts.type.ArtifactTypeRegistry;
 import org.gradle.api.internal.artifacts.type.DefaultArtifactTypeRegistry;
 import org.gradle.api.internal.attributes.AttributeDescriberRegistry;
 import org.gradle.api.internal.attributes.AttributeDesugaring;
+import org.gradle.api.internal.attributes.AttributesFactory;
 import org.gradle.api.internal.attributes.AttributesSchemaInternal;
 import org.gradle.api.internal.attributes.DefaultAttributesSchema;
-import org.gradle.api.internal.attributes.ImmutableAttributesFactory;
 import org.gradle.api.internal.file.FileCollectionFactory;
 import org.gradle.api.internal.file.FileLookup;
 import org.gradle.api.internal.file.FilePropertyFactory;
@@ -387,7 +387,7 @@ public class DefaultDependencyManagementServices implements DependencyManagement
         }
 
         @Provides
-        VariantTransformRegistry createVariantTransformRegistry(InstantiatorFactory instantiatorFactory, ImmutableAttributesFactory attributesFactory, ServiceRegistry services, TransformRegistrationFactory transformRegistrationFactory, TransformParameterScheme parameterScheme) {
+        VariantTransformRegistry createVariantTransformRegistry(InstantiatorFactory instantiatorFactory, AttributesFactory attributesFactory, ServiceRegistry services, TransformRegistrationFactory transformRegistrationFactory, TransformParameterScheme parameterScheme) {
             return new DefaultVariantTransformRegistry(instantiatorFactory, attributesFactory, services, transformRegistrationFactory, parameterScheme.getInstantiationScheme());
         }
 
@@ -407,7 +407,7 @@ public class DefaultDependencyManagementServices implements DependencyManagement
             VersionSelectorScheme versionSelectorScheme,
             AuthenticationSchemeRegistry authenticationSchemeRegistry,
             IvyContextManager ivyContextManager,
-            ImmutableAttributesFactory attributesFactory,
+            AttributesFactory attributesFactory,
             ImmutableModuleIdentifierFactory moduleIdentifierFactory,
             InstantiatorFactory instantiatorFactory,
             FileResourceRepository fileResourceRepository,
@@ -493,8 +493,8 @@ public class DefaultDependencyManagementServices implements DependencyManagement
         }
 
         @Provides
-        ArtifactTypeRegistry createArtifactTypeRegistry(Instantiator instantiator, ImmutableAttributesFactory immutableAttributesFactory, CollectionCallbackActionDecorator decorator, VariantTransformRegistry transformRegistry) {
-            return new DefaultArtifactTypeRegistry(instantiator, immutableAttributesFactory, decorator, transformRegistry);
+        ArtifactTypeRegistry createArtifactTypeRegistry(Instantiator instantiator, AttributesFactory attributesFactory, CollectionCallbackActionDecorator decorator, VariantTransformRegistry transformRegistry) {
+            return new DefaultArtifactTypeRegistry(instantiator, attributesFactory, decorator, transformRegistry);
         }
 
         @Provides
@@ -567,7 +567,7 @@ public class DefaultDependencyManagementServices implements DependencyManagement
             Instantiator instantiator,
             ImmutableModuleIdentifierFactory moduleIdentifierFactory,
             SimpleMapInterner interner,
-            ImmutableAttributesFactory attributesFactory,
+            AttributesFactory attributesFactory,
             IsolatableFactory isolatableFactory,
             ComponentMetadataRuleExecutor componentMetadataRuleExecutor,
             PlatformSupport platformSupport
@@ -738,8 +738,8 @@ public class DefaultDependencyManagementServices implements DependencyManagement
         }
 
         @Override
-        public ImmutableAttributesFactory getAttributesFactory() {
-            return services.get(ImmutableAttributesFactory.class);
+        public AttributesFactory getAttributesFactory() {
+            return services.get(AttributesFactory.class);
         }
 
         @Override

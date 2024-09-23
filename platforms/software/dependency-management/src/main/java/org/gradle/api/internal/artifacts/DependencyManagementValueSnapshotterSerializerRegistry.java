@@ -40,7 +40,7 @@ import org.gradle.api.internal.artifacts.metadata.ComponentFileArtifactIdentifie
 import org.gradle.api.internal.artifacts.metadata.ModuleComponentFileArtifactIdentifierSerializer;
 import org.gradle.api.internal.artifacts.metadata.PublishArtifactLocalArtifactMetadataSerializer;
 import org.gradle.api.internal.artifacts.metadata.TransformedComponentFileArtifactIdentifierSerializer;
-import org.gradle.api.internal.attributes.ImmutableAttributesFactory;
+import org.gradle.api.internal.attributes.AttributesFactory;
 import org.gradle.api.internal.model.NamedObjectInstantiator;
 import org.gradle.internal.Cast;
 import org.gradle.internal.component.external.model.DefaultModuleComponentArtifactIdentifier;
@@ -81,14 +81,14 @@ public class DependencyManagementValueSnapshotterSerializerRegistry extends Defa
 
     public DependencyManagementValueSnapshotterSerializerRegistry(
         ImmutableModuleIdentifierFactory moduleIdentifierFactory,
-        ImmutableAttributesFactory immutableAttributesFactory,
+        AttributesFactory attributesFactory,
         NamedObjectInstantiator namedObjectInstantiator,
         ComponentSelectionDescriptorFactory componentSelectionDescriptorFactory
     ) {
         super(true);
 
         ComponentIdentifierSerializer componentIdentifierSerializer = new ComponentIdentifierSerializer();
-        AttributeContainerSerializer attributeContainerSerializer = new DesugaringAttributeContainerSerializer(immutableAttributesFactory, namedObjectInstantiator);
+        AttributeContainerSerializer attributeContainerSerializer = new DesugaringAttributeContainerSerializer(attributesFactory, namedObjectInstantiator);
         ModuleVersionIdentifierSerializer moduleVersionIdentifierSerializer = new ModuleVersionIdentifierSerializer(moduleIdentifierFactory);
 
         register(Capability.class, new CapabilitySerializer());
