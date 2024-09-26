@@ -21,7 +21,6 @@ import org.gradle.api.Incubating;
 import org.gradle.api.NonNullApi;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.provider.ListProperty;
-import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Classpath;
@@ -33,7 +32,9 @@ import org.gradle.internal.HasInternalProtocol;
 import org.gradle.internal.instrumentation.api.annotations.ReplacedAccessor;
 import org.gradle.internal.instrumentation.api.annotations.ReplacedAccessor.AccessorType;
 import org.gradle.internal.instrumentation.api.annotations.ReplacesEagerProperty;
+import org.gradle.internal.instrumentation.api.annotations.ToBeReplacedByLazyProperty;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +59,15 @@ public interface JavaForkOptions extends ProcessForkOptions {
      * @return The system properties. Returns an empty map when there are no system properties.
      */
     @Input
-    @ReplacesEagerProperty
-    MapProperty<String, Object> getSystemProperties();
+    @ToBeReplacedByLazyProperty(comment = "This property is modified at execution time")
+    Map<String, Object> getSystemProperties();
+
+    /**
+     * Sets the system properties to use for the process.
+     *
+     * @param properties The system properties. Must not be null.
+     */
+    void setSystemProperties(Map<String, ?> properties);
 
     /**
      * Adds some system properties to use for the process.
@@ -117,8 +125,25 @@ public interface JavaForkOptions extends ProcessForkOptions {
      */
     @Optional
     @Input
-    @ReplacesEagerProperty(adapter = JvmArgsAdapter.class)
-    ListProperty<String> getJvmArgs();
+    @ToBeReplacedByLazyProperty(comment = "This property is modified at execution time")
+    List<String> getJvmArgs();
+
+    /**
+     * Sets the extra arguments to use to launch the JVM for the process. System properties
+     * and minimum/maximum heap size are updated.
+     *
+     * @param arguments The arguments. Must not be null.
+     * @since 4.0
+     */
+    void setJvmArgs(@Nullable List<String> arguments);
+
+    /**
+     * Sets the extra arguments to use to launch the JVM for the process. System properties
+     * and minimum/maximum heap size are updated.
+     *
+     * @param arguments The arguments. Must not be null.
+     */
+    void setJvmArgs(@Nullable Iterable<?> arguments);
 
     /**
      * Adds some arguments to use to launch the JVM for the process.

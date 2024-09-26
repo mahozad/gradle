@@ -378,9 +378,9 @@ public class JvmOptions {
 
     public void copyFrom(JavaForkOptions source) {
         setAllJvmArgs(Collections.emptyList());
-        jvmArgs(source.getJvmArgs().get());
+        jvmArgs(source.getJvmArgs());
         source.getJvmArgumentProviders().get().forEach(provider -> jvmArgs(provider.asArguments()));
-        systemProperties(source.getSystemProperties().get());
+        systemProperties(source.getSystemProperties());
         minHeapSize = source.getMinHeapSize().getOrNull();
         maxHeapSize = source.getMaxHeapSize().getOrNull();
         bootstrapClasspath = source.getBootstrapClasspath();
@@ -393,10 +393,8 @@ public class JvmOptions {
     }
 
     public void copyTo(JavaForkOptions target) {
-        target.getJvmArgs().empty();
-        target.jvmArgs(extraJvmArgs);
-        target.getSystemProperties().empty();
-        target.systemProperties(mutableSystemProperties);
+        target.setJvmArgs(extraJvmArgs);
+        target.setSystemProperties(mutableSystemProperties);
         target.getMinHeapSize().set(minHeapSize);
         target.getMaxHeapSize().set(maxHeapSize);
         target.bootstrapClasspath(getBootstrapClasspath());

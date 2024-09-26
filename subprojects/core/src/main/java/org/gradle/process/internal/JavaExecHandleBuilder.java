@@ -26,7 +26,6 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
-import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.initialization.BuildCancellationToken;
@@ -156,8 +155,18 @@ public class JavaExecHandleBuilder extends AbstractExecHandleBuilder implements 
     }
 
     @Override
-    public ListProperty<String> getJvmArgs() {
+    public List<String> getJvmArgs() {
         return javaOptions.getJvmArgs();
+    }
+
+    @Override
+    public void setJvmArgs(@Nullable List<String> jvmArgs) {
+        javaOptions.setJvmArgs(jvmArgs);
+    }
+
+    @Override
+    public void setJvmArgs(@Nullable Iterable<?> jvmArgs) {
+        javaOptions.setJvmArgs(jvmArgs);
     }
 
     @Override
@@ -178,8 +187,13 @@ public class JavaExecHandleBuilder extends AbstractExecHandleBuilder implements 
     }
 
     @Override
-    public MapProperty<String, Object> getSystemProperties() {
+    public Map<String, Object> getSystemProperties() {
         return javaOptions.getSystemProperties();
+    }
+
+    @Override
+    public void setSystemProperties(Map<String, ?> properties) {
+        javaOptions.setSystemProperties(properties);
     }
 
     @Override

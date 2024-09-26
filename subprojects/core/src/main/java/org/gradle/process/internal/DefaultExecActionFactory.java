@@ -17,6 +17,7 @@
 package org.gradle.process.internal;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.gradle.api.Action;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -33,7 +34,6 @@ import org.gradle.api.internal.provider.PropertyHost;
 import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
-import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.util.PatternSet;
@@ -414,11 +414,11 @@ public abstract class DefaultExecActionFactory implements ExecFactory {
         private final Property<String> defaultCharacterEncoding;
         private final Property<String> minHeapSize;
         private final Property<String> maxHeapSize;
-        private final ListProperty<String> jvmArgs;
+        private final List<String> jvmArgs;
         private final ConfigurableFileCollection bootstrapClasspath;
         private final Property<Boolean> enableAssertions;
         private final Property<Boolean> debug;
-        private final MapProperty<String, Object> systemProperties;
+        private final Map<String, Object> systemProperties;
 
         public ImmutableJavaForkOptions(ObjectFactory objectFactory, FileCollectionFactory fileCollectionFactory, JavaForkOptionsInternal delegate) {
             this.delegate = delegate;
@@ -428,16 +428,14 @@ public abstract class DefaultExecActionFactory implements ExecFactory {
             this.minHeapSize.disallowChanges();
             this.maxHeapSize = objectFactory.property(String.class).convention(delegate.getMaxHeapSize());
             this.maxHeapSize.disallowChanges();
-            this.jvmArgs = objectFactory.listProperty(String.class).convention(delegate.getJvmArgs());
-            this.jvmArgs.disallowChanges();
+            this.jvmArgs = ImmutableList.copyOf(delegate.getJvmArgs());
             this.bootstrapClasspath = fileCollectionFactory.configurableFiles().from(delegate.getBootstrapClasspath());
             this.bootstrapClasspath.disallowChanges();
             this.enableAssertions = objectFactory.property(Boolean.class).convention(delegate.getEnableAssertions());
             this.enableAssertions.disallowChanges();
             this.debug = objectFactory.property(Boolean.class).convention(delegate.getDebug());
             this.debug.disallowChanges();
-            this.systemProperties = objectFactory.mapProperty(String.class, Object.class).convention(delegate.getSystemProperties());
-            this.systemProperties.disallowChanges();
+            this.systemProperties = ImmutableMap.copyOf(delegate.getSystemProperties());
         }
 
         @Override
@@ -451,8 +449,13 @@ public abstract class DefaultExecActionFactory implements ExecFactory {
         }
 
         @Override
-        public MapProperty<String, Object> getSystemProperties() {
+        public Map<String, Object> getSystemProperties() {
             return systemProperties;
+        }
+
+        @Override
+        public void setSystemProperties(Map<String, ?> properties) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -536,8 +539,18 @@ public abstract class DefaultExecActionFactory implements ExecFactory {
         }
 
         @Override
-        public ListProperty<String> getJvmArgs() {
+        public List<String> getJvmArgs() {
             return jvmArgs;
+        }
+
+        @Override
+        public void setJvmArgs(@Nullable List<String> jvmArgs) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setJvmArgs(@Nullable Iterable<?> jvmArgs) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
